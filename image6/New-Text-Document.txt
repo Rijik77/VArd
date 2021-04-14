@@ -1,0 +1,73 @@
+#include <iostream>
+#include <vector>
+#include <stack>
+
+using namespace std;
+
+void dfs(int v, 
+	vector<vector<int>>& graph,
+	vector<bool>& visited,
+	stack<int>& s)
+{
+	visited[v] = true;
+	for (int u : graph[v]) {
+		if (!visited[u]) {
+			dfs(u, graph, visited, s);
+		}
+	}
+	//cout << v << endl;
+	s.push(v);
+}
+
+void dfs2(int v, 
+	vector<vector<int>>& graph,
+	vector<bool>& visited)
+{
+	visited[v] = true;
+	cout << v << ' ';
+	for (int u : graph[v]) {
+		if (!visited[u]) {
+			dfs2(u, graph, visited);
+		}
+	}
+}
+
+
+int main() {
+	int n, m;
+	cin >> n >> m;
+	
+	vector<vector<int>> graph(n);
+	vector<vector<int>> graphT(n);
+	
+	for (int i = 0; i < m; ++i) {
+		int a, b;
+		cin >> a >> b;
+		graph[a].push_back(b);
+		graphT[b].push_back(a);
+	}
+	
+	
+	vector<bool> visited(n, false);
+	stack<int> s;
+	for (int i = 0; i < n; ++i) {
+		if (!visited[i]) {
+			dfs(i, graph, visited, s);
+		}
+	}
+	
+	vector<bool> visited2(n, false);
+	while (!s.empty()) {
+		int t = s.top();
+		s.pop();
+		if (!visited2[t]) {
+			dfs2(t, graphT, visited2);	
+			cout << endl;
+		} 
+	}
+}
+
+
+
+
+
